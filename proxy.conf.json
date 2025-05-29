@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://m-cortez.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
