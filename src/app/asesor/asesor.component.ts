@@ -201,7 +201,9 @@ obtenerVentas() {
         }
     });
 }
-
+get ventasTotales(): number {
+  return this.ventas.reduce((sum, v) => sum + v.number_sales, 0);
+}
 isNewRow(index: number): boolean {
     if (!this.previousVentas || this.previousVentas.length === 0) return false;
     
