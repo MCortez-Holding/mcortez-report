@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { VentasService } from '../services/ventas.service';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-asesor',
@@ -153,9 +154,10 @@ export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 obtenerVentas() {
-    const hoy = new Date();
+    const limaNow = DateTime.now().setZone('America/Lima');
+const fechaLimaDate = limaNow.toJSDate();;
 
-    this.ventasService.getVentas(hoy, hoy).subscribe({
+    this.ventasService.getVentas(fechaLimaDate, fechaLimaDate).subscribe({
         next: (data: any) => {
             // Mapear los datos recibidos al formato esperado
             const ventasMapeadas = data.datos.map((item: any) => ({
