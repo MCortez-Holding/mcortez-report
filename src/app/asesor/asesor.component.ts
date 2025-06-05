@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { VentasService } from '../services/ventas.service';
 import { DateTime } from 'luxon';
+import * as moment from 'moment-timezone';
+
 
 @Component({
   selector: 'app-asesor',
@@ -154,12 +156,11 @@ export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 obtenerVentas() {
-    const limaNow = DateTime.now().setZone('America/Lima');
-const fechaLimaDate = limaNow.toJSDate();;
+    const fechaLima = moment.tz('America/Lima');
+    const fechaLimaDate = fechaLima.toDate(); // Convertir a Date si el backend lo requiere como objeto Date
 
     this.ventasService.getVentas(fechaLimaDate, fechaLimaDate).subscribe({
         next: (data: any) => {
-            // Mapear los datos recibidos al formato esperado
             const ventasMapeadas = data.datos.map((item: any) => ({
                 advisor_name: item.asesor,
                 sala: item.sala,
@@ -173,22 +174,13 @@ const fechaLimaDate = limaNow.toJSDate();;
                 vprogramadas: parseInt(item.vprogramadas)
             }));
 
-            // Ordenar por: 
-            // 1. Total UGIs (descendente)
-            // 2. Si hay empate, por Programadas (descendente)
-            // 3. Si persiste empate, por Atendidas (descendente)
             ventasMapeadas.sort((a: any, b: any) => {
-                // Primero comparar por Total UGIs
                 if (b.number_sales !== a.number_sales) {
                     return b.number_sales - a.number_sales;
                 }
-                
-                // Si hay empate en Total UGIs, comparar por Programadas
                 if (b.vprogramadas !== a.vprogramadas) {
                     return b.vprogramadas - a.vprogramadas;
                 }
-                
-                // Si persiste el empate, comparar por Atendidas
                 return b.sales_attended - a.sales_attended;
             });
 

@@ -28,7 +28,6 @@ export class VentasService {
     const formData = new FormData();
     formData.append('fechaIni', formatDate(fechaInicio));
     formData.append('fechaFin', formatDate(fechaFin));
-    formData.append('predict','3');
 
     const url = `${API.url}/reportGeneral.php?op=tableReportDay`;
 
