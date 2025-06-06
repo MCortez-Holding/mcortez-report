@@ -28,6 +28,7 @@ export class VentasService {
     const formData = new FormData();
     formData.append('fechaIni', formatDate(fechaInicio));
     formData.append('fechaFin', formatDate(fechaFin));
+    formData.append('grupo', "2,3,4,5,6,7,8,9,10,11,12,13,15,14,16,17,18,19,20");
 
     const url = `${API.url}/reportGeneral.php?op=tableReportDay`;
 
