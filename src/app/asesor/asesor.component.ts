@@ -17,7 +17,7 @@ export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
   private countdownInterval: any;
   private previousVentas: any[] = [];
   countdown: string = '02:00';
-  updateFrequency: number = 120; 
+  updateFrequency: number = 120;
   constructor(private ventasService: VentasService) {}
 
    ngOnInit(): void {
@@ -40,17 +40,17 @@ export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
 
    private startCountdown() {
     let secondsLeft = this.updateFrequency;
-    
+
     this.countdownInterval = setInterval(() => {
       secondsLeft--;
-      
+
       if (secondsLeft < 0) {
         secondsLeft = this.updateFrequency;
       }
-      
+
       const minutes = Math.floor(secondsLeft / 60);
       const seconds = secondsLeft % 60;
-      
+
       this.countdown = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }, 1000);
   }
@@ -155,57 +155,58 @@ export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('resize', resizeCanvas);
   }
 
-obtenerVentas() {
-    const fechaLima = moment.tz('America/Lima');
-    const fechaLimaDate = fechaLima.toDate(); // Convertir a Date si el backend lo requiere como objeto Date
+  obtenerVentas() {
+    const fechaLima = moment.tz('America/Lima').startOf('day');
+    const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
+    const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
 
     this.ventasService.getVentas(fechaLimaDate, fechaLimaDate).subscribe({
-        next: (data: any) => {
-            const ventasMapeadas = data.datos.map((item: any) => ({
-                advisor_name: item.asesor,
-                sala: item.sala,
-                sales_attended: parseInt(item.atendida),
-                number_sales: parseInt(item.total),
-                totalugis: parseInt(item.totalugis),
-                vxevaluarpre: parseInt(item.vxevaluarpre),
-                vxevaluarpost: parseInt(item.vxevaluarpost),
-                vxvalidar: parseInt(item.vxvalidar),
-                vxprogramar: parseInt(item.vxprogramar),
-                vprogramadas: parseInt(item.vprogramadas)
-            }));
+      next: (data: any) => {
+        const ventasMapeadas = data.datos.map((item: any) => ({
+          advisor_name: item.asesor,
+          sala: item.sala,
+          sales_attended: parseInt(item.atendida),
+          number_sales: parseInt(item.total),
+          totalugis: parseInt(item.totalugis),
+          vxevaluarpre: parseInt(item.vxevaluarpre),
+          vxevaluarpost: parseInt(item.vxevaluarpost),
+          vxvalidar: parseInt(item.vxvalidar),
+          vxprogramar: parseInt(item.vxprogramar),
+          vprogramadas: parseInt(item.vprogramadas)
+        }));
 
-            ventasMapeadas.sort((a: any, b: any) => {
-                if (b.number_sales !== a.number_sales) {
-                    return b.number_sales - a.number_sales;
-                }
-                if (b.vprogramadas !== a.vprogramadas) {
-                    return b.vprogramadas - a.vprogramadas;
-                }
-                return b.sales_attended - a.sales_attended;
-            });
+        ventasMapeadas.sort((a: any, b: any) => {
+          if (b.number_sales !== a.number_sales) {
+            return b.number_sales - a.number_sales;
+          }
+          if (b.vprogramadas !== a.vprogramadas) {
+            return b.vprogramadas - a.vprogramadas;
+          }
+          return b.sales_attended - a.sales_attended;
+        });
 
-            if (JSON.stringify(this.ventas) !== JSON.stringify(ventasMapeadas)) {
-                this.previousVentas = [...this.ventas];
-                this.ventas = ventasMapeadas;
-                console.log('Datos actualizados:', ventasMapeadas);
-            }
-        },
-        error: (err) => {
-            console.error('Error al obtener ventas:', err);
+        if (JSON.stringify(this.ventas) !== JSON.stringify(ventasMapeadas)) {
+          this.previousVentas = [...this.ventas];
+          this.ventas = ventasMapeadas;
+          console.log('Datos actualizados:', ventasMapeadas);
         }
+      },
+      error: (err) => {
+        console.error('Error al obtener ventas:', err);
+      }
     });
-}
+  }
 get ventasTotales(): number {
   return this.ventas.reduce((sum, v) => sum + v.number_sales, 0);
 }
 isNewRow(index: number): boolean {
     if (!this.previousVentas || this.previousVentas.length === 0) return false;
-    
+
     if (index >= this.previousVentas.length) return true;
-    
+
     const currentVenta = this.ventas[index];
     const previousVenta = this.previousVentas[index];
-    
+
     return JSON.stringify(currentVenta) !== JSON.stringify(previousVenta);
 }
 }
