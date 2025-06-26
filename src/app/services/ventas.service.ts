@@ -22,13 +22,13 @@ export class VentasService {
     });
   }
 
-  getVentas(fechaInicio: Date, fechaFin: Date): Observable<any[]> {
+  getVentas(fechaInicio: Date, fechaFin: Date, salas: String = ""): Observable<any[]> {
     const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
     const formData = new FormData();
     formData.append('fechaIni', formatDate(fechaInicio));
     formData.append('fechaFin', formatDate(fechaFin));
-    formData.append('grupo', "0,2,3,4,5,6,7,8,9,10,11,12,13,15,14,16,17,19,20,51,52,53,54");
+    formData.append('grupo', salas.toString());
 
     const url = `${API.url}/reportGeneral.php?op=tableReportDay`;
 

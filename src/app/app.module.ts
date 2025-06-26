@@ -7,6 +7,7 @@ import { ReporteComponent } from './reporte/reporte.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
 import { AsesorComponent } from './asesor/asesor.component';
+import { AsesorDosComponent } from './asesor-dos/asesor-dos.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     ReporteComponent,
     NavBarComponent,
-    AsesorComponent
+    AsesorComponent,
+    AsesorDosComponent
   ],
   imports: [
     BrowserModule,
