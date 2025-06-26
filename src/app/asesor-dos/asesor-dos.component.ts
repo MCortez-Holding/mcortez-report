@@ -6,11 +6,11 @@ import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-asesor',
-  templateUrl: './asesor.component.html',
+  templateUrl: 'asesor-dos.component.html',
   standalone: false,
-  styleUrls: ['./asesor.component.css']
+  styleUrls: ['asesor-dos.component.css']
 })
-export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AsesorDosComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('particlesCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
   ventas: any[] = [];
     private updateInterval: any;
@@ -160,7 +160,7 @@ export class AsesorComponent implements OnInit, AfterViewInit, OnDestroy {
     const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
     const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
 
-    this.ventasService.getVentas(fechaLimaDateInicio, fechaLimaDateFin, "51,52").subscribe({
+    this.ventasService.getVentas(fechaLimaDateInicio, fechaLimaDateFin, "53,54").subscribe({
       next: (data: any) => {
         const ventasMapeadas = data.datos.map((item: any) => ({
           advisor_name: item.asesor,
