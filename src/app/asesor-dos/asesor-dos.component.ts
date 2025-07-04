@@ -160,7 +160,7 @@ export class AsesorDosComponent implements OnInit, AfterViewInit, OnDestroy {
     const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
     const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
 
-    this.ventasService.getVentas(fechaLimaDateInicio, fechaLimaDateFin, "53,54").subscribe({
+    this.ventasService.getVentas(fechaLimaDateInicio, fechaLimaDateFin, "52").subscribe({
       next: (data: any) => {
         const ventasMapeadas = data.datos.map((item: any) => ({
           advisor_name: item.asesor,
