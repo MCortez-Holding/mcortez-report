@@ -6,29 +6,25 @@ import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-asesor',
-  templateUrl: 'report-telecom.component.html',
+  templateUrl: 'report-konectar.component.html',
   standalone: false,
-  styleUrls: ['report-telecom.component.css']
+  styleUrls: ['report-konectar.component.css']
 })
-export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ReportKonectarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('particlesCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
-  ventas2: any[] = [];
-  ventas4: any[] = [];
+  ventas: any[] = [];
   private updateInterval: any;
   private countdownInterval: any;
-  private previousVentas2: any[] = [];
-  private previousVentas4: any[] = [];
+  private previousVentas: any[] = [];
   countdown: string = '02:00';
   updateFrequency: number = 120;
   constructor(private ventasService: VentasService) {}
 
    ngOnInit(): void {
-    this.obtenerVentasSala2();
-    this.obtenerVentasSala4();
+    this.obtenerVentas();
     this.startCountdown();
     this.updateInterval = setInterval(() => {
-      this.obtenerVentasSala2();
-      this.obtenerVentasSala4();
+      this.obtenerVentas();
       this.resetCountdown();
     }, this.updateFrequency * 1000);
   }
@@ -159,13 +155,12 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
     window.addEventListener('resize', resizeCanvas);
   }
 
-  obtenerVentasSala2() {
+  obtenerVentas() {
     const fechaLima = moment.tz('America/Lima').startOf('day');
     const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
     const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
-    const Sala = "2";
 
-    this.ventasService.getVentasTelecom(fechaLimaDateInicio, fechaLimaDateFin, Sala).subscribe({
+    this.ventasService.getVentasKonectar(fechaLimaDateInicio, fechaLimaDateFin).subscribe({
       next: (data: any) => {
         const ventasMapeadas = data.datos.map((item: any) => ({
           advisor_name: item.asesor,
@@ -190,51 +185,9 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
           return b.sales_attended - a.sales_attended;
         });
 
-        if (JSON.stringify(this.ventas2) !== JSON.stringify(ventasMapeadas)) {
-          this.previousVentas2 = [...this.ventas2];
-          this.ventas2 = ventasMapeadas;
-          console.log('Datos actualizados:', ventasMapeadas);
-        }
-      },
-      error: (err) => {
-        console.error('Error al obtener ventas:', err);
-      }
-    });
-  }
-  obtenerVentasSala4() {
-    const fechaLima = moment.tz('America/Lima').startOf('day');
-    const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
-    const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
-    const Sala = "4";
-
-    this.ventasService.getVentasTelecom(fechaLimaDateInicio, fechaLimaDateFin, Sala).subscribe({
-      next: (data: any) => {
-        const ventasMapeadas = data.datos.map((item: any) => ({
-          advisor_name: item.asesor,
-          sala: item.sala,
-          sales_attended: parseInt(item.atendida),
-          number_sales: parseInt(item.total),
-          totalugis: parseInt(item.totalugis),
-          vxevaluarpre: parseInt(item.vxevaluarpre),
-          vxevaluarpost: parseInt(item.vxevaluarpost),
-          vxvalidar: parseInt(item.vxvalidar),
-          vxprogramar: parseInt(item.vxprogramar),
-          vprogramadas: parseInt(item.vprogramadas)
-        }));
-
-        ventasMapeadas.sort((a: any, b: any) => {
-          if (b.number_sales !== a.number_sales) {
-            return b.number_sales - a.number_sales;
-          }
-          if (b.vprogramadas !== a.vprogramadas) {
-            return b.vprogramadas - a.vprogramadas;
-          }
-          return b.sales_attended - a.sales_attended;
-        });
-
-        if (JSON.stringify(this.ventas4) !== JSON.stringify(ventasMapeadas)) {
-          this.previousVentas4 = [...this.ventas4];
-          this.ventas4 = ventasMapeadas;
+        if (JSON.stringify(this.ventas) !== JSON.stringify(ventasMapeadas)) {
+          this.previousVentas = [...this.ventas];
+          this.ventas = ventasMapeadas;
           console.log('Datos actualizados:', ventasMapeadas);
         }
       },
@@ -244,25 +197,16 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 get ventasTotales(): number {
-  return this.ventas2.reduce((sum, v) => sum + v.number_sales, 0);
+  return this.ventas.reduce((sum, v) => sum + v.number_sales, 0);
 }
-isNewRowVentas2(index: number): boolean {
-  if (!this.previousVentas2 || this.previousVentas2.length === 0) return false;
-  if (index >= this.previousVentas2.length) return true;
+isNewRow(index: number): boolean {
+  if (!this.previousVentas || this.previousVentas.length === 0) return false;
+  if (index >= this.previousVentas.length) return true;
 
-  const current2= this.ventas2[index];
-  const previous2 = this.previousVentas2[index];
+  const current2= this.ventas[index];
+  const previous2 = this.previousVentas[index];
 
   return JSON.stringify(current2) !== JSON.stringify(previous2);
 }
 
-isNewRowVentas4(index: number): boolean {
-  if (!this.previousVentas4 || this.previousVentas4.length === 0) return false;
-  if (index >= this.previousVentas4.length) return true;
-
-  const current4 = this.ventas4[index];
-  const previous4 = this.previousVentas4[index];
-
-  return JSON.stringify(current4) !== JSON.stringify(previous4);
-}
 }
