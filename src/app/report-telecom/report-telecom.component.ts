@@ -24,11 +24,11 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
 
    ngOnInit(): void {
     this.obtenerVentasSala2();
-    this.obtenerVentasSala4();
+    this.obtenerVentasSala6();
     this.startCountdown();
     this.updateInterval = setInterval(() => {
       this.obtenerVentasSala2();
-      this.obtenerVentasSala4();
+      this.obtenerVentasSala6();
       this.resetCountdown();
     }, this.updateFrequency * 1000);
   }
@@ -201,11 +201,11 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     });
   }
-  obtenerVentasSala4() {
+  obtenerVentasSala6() {
     const fechaLima = moment.tz('America/Lima').startOf('day');
     const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
     const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
-    const Sala = "4";
+    const Sala = "6";
 
     this.ventasService.getVentasTelecom(fechaLimaDateInicio, fechaLimaDateFin, Sala).subscribe({
       next: (data: any) => {
