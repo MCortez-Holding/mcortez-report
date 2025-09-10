@@ -161,3 +161,8 @@
 .table-glow td:not(:nth-child(2)) {
   min-width: 100px;
 }
+.table-container{
+  display: flex;
+  gap: 20px;  
+  justify-content: center;
+}

@@ -10,49 +10,98 @@
   <span class="ms-3">Llevamos {{ ventasTotales }} ventas subidas!</span>
 </h2>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-striped table-glow" #tablaVentas>
-                        <thead class="table-header">
-                            <tr>
-                                <th scope="col">Posición</th>
-                                <th scope="col">Asesor</th>
-                                <th scope="col">Sala</th>
-                                <th scope="col">Total Subidas</th>
-                                <!-- <th scope="col">A Evaluar (Pre)</th>
-                                <th scope="col">A Evaluar (Post)</th> -->
-                                <!-- <th scope="col">A Validar</th> -->
-                                <!-- <th scope="col">A Programar</th> -->
-                                <th scope="col">Programadas</th>
-                                <th scope="col">Atendidas</th>
-                                <!-- <th scope="col">Efectividad</th> -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let venta of ventas; let i = index" [ngClass]="{
-                                'top-1': i === 0, 
-                                'top-2': i === 1, 
-                                'top-3': i === 2,
-                                'new-row': isNewRow(i)
-                              }">
-                                <td>
-                                    <span *ngIf="i === 0" class="medal-icon gold">🥇</span>
-                                    <span *ngIf="i === 1" class="medal-icon silver">🥈</span>
-                                    <span *ngIf="i === 2" class="medal-icon bronze">🥉</span>
-                                    <span *ngIf="i >= 3">{{i + 1}}</span>
-                                </td>
-                                <td>{{venta.advisor_name}}</td>
-                                <td>{{venta.sala}}</td>
-                                <td>{{venta.number_sales}}</td>
-                                <!-- <td>{{venta.vxevaluarpre}}</td>
-                                <td>{{venta.vxevaluarpost}}</td> -->
-                                <!-- <td>{{venta.vxvalidar}}</td>
-                                <td>{{venta.vxprogramar}}</td> -->
-                                <td>{{venta.vprogramadas}}</td>
-                                <td>{{venta.sales_attended}}</td>
-                                <!-- <td>{{ (venta.sales_attended / venta.number_sales * 100) | number:'1.2-2' }}%</td> -->
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <!-- Sala 2 -->
+                        <table class="table table-striped table-glow" #tablaVentas>
+                            <thead class="table-header">
+                                <tr>
+                                    <th scope="col">Posición</th>
+                                    <th scope="col">Asesor</th>
+                                    <th scope="col">Sala</th>
+                                    <th scope="col">Total Subidas</th>
+                                    <!-- <th scope="col">A Evaluar (Pre)</th>
+                                    <th scope="col">A Evaluar (Post)</th> -->
+                                    <!-- <th scope="col">A Validar</th> -->
+                                    <!-- <th scope="col">A Programar</th> -->
+                                    <th scope="col">Programadas</th>
+                                    <th scope="col">Atendidas</th>
+                                    <!-- <th scope="col">Efectividad</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let venta2 of ventas2; let i = index" [ngClass]="{
+                                    'top-1': i === 0, 
+                                    'top-2': i === 1, 
+                                    'top-3': i === 2,
+                                    'new-row': isNewRowVentas2(i)
+                                  }">
+                                    <td>
+                                        <span *ngIf="i === 0" class="medal-icon gold">🥇</span>
+                                        <span *ngIf="i === 1" class="medal-icon silver">🥈</span>
+                                        <span *ngIf="i === 2" class="medal-icon bronze">🥉</span>
+                                        <span *ngIf="i >= 3">{{i + 1}}</span>
+                                    </td>
+                                    <td>{{venta2.advisor_name}}</td>
+                                    <td>{{venta2.sala}}</td>
+                                    <td>{{venta2.number_sales}}</td>
+                                    <!-- <td>{{venta2.vxevaluarpre}}</td>
+                                    <td>{{venta2.vxevaluarpost}}</td> -->
+                                    <!-- <td>{{venta2.vxvalidar}}</td>
+                                    <td>{{venta2.vxprogramar}}</td> -->
+                                    <td>{{venta2.vprogramadas}}</td>
+                                    <td>{{venta2.sales_attended}}</td>
+                                    <!-- <td>{{ (venta2.sales_attended / venta.number_sales * 100) | number:'1.2-2' }}%</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-responsive">
+    
+                        <!-- Sala 4 -->
+                        <table class="table table-striped table-glow" #tablaVentas>
+                            <thead class="table-header">
+                                <tr>
+                                    <th scope="col">Posición</th>
+                                    <th scope="col">Asesor</th>
+                                    <th scope="col">Sala</th>
+                                    <th scope="col">Total Subidas</th>
+                                    <!-- <th scope="col">A Evaluar (Pre)</th>
+                                    <th scope="col">A Evaluar (Post)</th> -->
+                                    <!-- <th scope="col">A Validar</th> -->
+                                    <!-- <th scope="col">A Programar</th> -->
+                                    <th scope="col">Programadas</th>
+                                    <th scope="col">Atendidas</th>
+                                    <!-- <th scope="col">Efectividad</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let venta4 of ventas4; let i = index" [ngClass]="{
+                                    'top-1': i === 0, 
+                                    'top-2': i === 1, 
+                                    'top-3': i === 2,
+                                    'new-row': isNewRowVentas4(i)
+                                  }">
+                                    <td>
+                                        <span *ngIf="i === 0" class="medal-icon gold">🥇</span>
+                                        <span *ngIf="i === 1" class="medal-icon silver">🥈</span>
+                                        <span *ngIf="i === 2" class="medal-icon bronze">🥉</span>
+                                        <span *ngIf="i >= 3">{{i + 1}}</span>
+                                    </td>
+                                    <td>{{venta4.advisor_name}}</td>
+                                    <td>{{venta4.sala}}</td>
+                                    <td>{{venta4.number_sales}}</td>
+                                    <!-- <td>{{venta4.vxevaluarpre}}</td>
+                                    <td>{{venta4.vxevaluarpost}}</td> -->
+                                    <!-- <td>{{venta4.vxvalidar}}</td>
+                                    <td>{{venta4.vxprogramar}}</td> -->
+                                    <td>{{venta4.vprogramadas}}</td>
+                                    <td>{{venta4.sales_attended}}</td>
+                                    <!-- <td>{{ (venta4.sales_attended / venta4.number_sales * 100) | number:'1.2-2' }}%</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
