@@ -50,4 +50,18 @@ export class VentasService {
       headers: this.getAuthHeaders()
     });
   }
+  getVentasKonectar(fechaInicio: Date, fechaFin: Date, salas: String = ""): Observable<any[]> {
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
+    const formData = new FormData();
+    formData.append('fechaIni', formatDate(fechaInicio));
+    formData.append('fechaFin', formatDate(fechaFin));
+    formData.append('grupo', salas.toString());
+
+    const url = `${API.urlKonectar}/reportGeneral.php?op=tableReportDay`;
+
+    return this.http.post<any[]>(url, formData, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
