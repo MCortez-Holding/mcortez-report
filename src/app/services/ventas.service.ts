@@ -64,4 +64,30 @@ export class VentasService {
       headers: this.getAuthHeaders()
     });
   }
+  getVentasInstaladas(fechaInicio: Date, fechaFin: Date): Observable<any[]> {
+   const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
+    const formData = new FormData();
+    formData.append('fechaIni', formatDate(fechaInicio));
+    formData.append('fechaFin', formatDate(fechaFin));
+
+    const url = `${API.urlKonectar}/reportGeneral.php?op=tableReportInstaladas`;
+
+    return this.http.post<any[]>(url, formData, {
+      headers: this.getAuthHeaders()
+    });
+  }
+  getVentasInstaladasTelecomp(fechaIni: Date, fechaFin: Date): Observable<any[]> {
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
+    const formData = new FormData();
+    formData.append('fechaIni', formatDate(fechaIni));
+    formData.append('fechaFin', formatDate(fechaFin));
+
+    const url = `${API.urlRomy}/reportGeneral.php?op=tableReportInstaladas`;
+
+    return this.http.post<any[]>(url, formData, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
