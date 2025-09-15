@@ -25,12 +25,12 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
 
    ngOnInit(): void {
     this.obtenerVentasSala2();
+    this.obtenerVentasSala6();
     this.obtenerVentasIntaladas();
-    this.obtenerVentasSala4();
     this.startCountdown();
     this.updateInterval = setInterval(() => {
       this.obtenerVentasSala2();
-      this.obtenerVentasSala4();
+      this.obtenerVentasSala6();
       this.obtenerVentasIntaladas();
       this.resetCountdown();
     }, this.updateFrequency * 1000);
@@ -204,11 +204,11 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     });
   }
-  obtenerVentasSala4() {
+  obtenerVentasSala6() {
     const fechaLima = moment.tz('America/Lima').startOf('day');
     const fechaLimaDateInicio = fechaLima.toDate(); // Fecha inicio del día
     const fechaLimaDateFin = fechaLima.endOf('day').toDate(); // Fecha final del día
-    const Sala = "4";
+    const Sala = "6";
 
     this.ventasService.getVentasTelecom(fechaLimaDateInicio, fechaLimaDateFin, Sala).subscribe({
       next: (data: any) => {
@@ -249,7 +249,7 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
   obtenerVentasIntaladas() {
       const fechainiciomes = moment.tz('America/Lima').startOf('month').toDate();
       const fechadehoy = moment.tz('America/Lima').toDate();
-  
+
       this.ventasService.getVentasInstaladasTelecomp(fechainiciomes, fechadehoy).subscribe({
         next: (data: any) => {
           const ventasMapeadas = data.datos.map((item: any) => ({
