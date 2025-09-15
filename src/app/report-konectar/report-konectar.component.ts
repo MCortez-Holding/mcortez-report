@@ -13,6 +13,7 @@ import * as moment from 'moment-timezone';
 export class ReportKonectarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('particlesCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
   ventas: any[] = [];
+  instaladas: any[] = [];
   private updateInterval: any;
   private countdownInterval: any;
   private previousVentas: any[] = [];
@@ -22,9 +23,11 @@ export class ReportKonectarComponent implements OnInit, AfterViewInit, OnDestroy
 
    ngOnInit(): void {
     this.obtenerVentas();
+    this.obtenerVentasIntaladas();
     this.startCountdown();
     this.updateInterval = setInterval(() => {
       this.obtenerVentas();
+      this.obtenerVentasIntaladas();
       this.resetCountdown();
     }, this.updateFrequency * 1000);
   }
@@ -196,8 +199,35 @@ export class ReportKonectarComponent implements OnInit, AfterViewInit, OnDestroy
       }
     });
   }
+  obtenerVentasIntaladas() {
+    const fechaIni = moment.tz('America/Lima').startOf('month').toDate();
+    const fechaFin = moment.tz('America/Lima').toDate();
+
+    this.ventasService.getVentasInstaladas(fechaIni, fechaFin).subscribe({
+      next: (data: any) => {
+        const ventasMapeadas = data.datos.map((item: any) => ({
+          vintaladas: parseInt(item.vintaladas)
+        }));
+        ventasMapeadas.sort((a: any, b: any) => {
+          return b.vintaladas - a.vintaladas;
+        });
+        if (JSON.stringify(this.instaladas) !== JSON.stringify(ventasMapeadas)) {
+          this.instaladas = ventasMapeadas;
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener ventas:', err);
+      }
+    });
+  }
 get ventasTotales(): number {
   return this.ventas.reduce((sum, v) => sum + v.number_sales, 0);
+}
+get ventasInstaladas(): number {
+  return this.instaladas.reduce((sum, v) => sum + v.vintaladas, 0);
+}
+get ventasFaltantes(): number {
+  return 500 -(this.instaladas.reduce((sum, v) => sum + v.vintaladas, 0));
 }
 isNewRow(index: number): boolean {
   if (!this.previousVentas || this.previousVentas.length === 0) return false;

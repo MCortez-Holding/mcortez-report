@@ -14,6 +14,7 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild('particlesCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
   ventas2: any[] = [];
   ventas4: any[] = [];
+  instaladas: any[] = [];
   private updateInterval: any;
   private countdownInterval: any;
   private previousVentas2: any[] = [];
@@ -24,11 +25,13 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
 
    ngOnInit(): void {
     this.obtenerVentasSala2();
+    this.obtenerVentasIntaladas();
     this.obtenerVentasSala4();
     this.startCountdown();
     this.updateInterval = setInterval(() => {
       this.obtenerVentasSala2();
       this.obtenerVentasSala4();
+      this.obtenerVentasIntaladas();
       this.resetCountdown();
     }, this.updateFrequency * 1000);
   }
@@ -243,8 +246,35 @@ export class ReportTelecomComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     });
   }
+  obtenerVentasIntaladas() {
+      const fechainiciomes = moment.tz('America/Lima').startOf('month').toDate();
+      const fechadehoy = moment.tz('America/Lima').toDate();
+  
+      this.ventasService.getVentasInstaladasTelecomp(fechainiciomes, fechadehoy).subscribe({
+        next: (data: any) => {
+          const ventasMapeadas = data.datos.map((item: any) => ({
+            vintaladas: parseInt(item.vintaladas)
+          }));
+          ventasMapeadas.sort((a: any, b: any) => {
+            return b.vintaladas - a.vintaladas;
+          });
+          if (JSON.stringify(this.instaladas) !== JSON.stringify(ventasMapeadas)) {
+            this.instaladas = ventasMapeadas;
+          }
+        },
+        error: (err) => {
+          console.error('Error al obtener ventas:', err);
+        }
+      });
+    }
 get ventasTotales(): number {
   return this.ventas2.reduce((sum, v) => sum + v.number_sales, 0);
+}
+get ventasInstaladas(): number {
+  return this.instaladas.reduce((sum, v) => sum + v.vintaladas, 0);
+}
+get ventasFaltantes(): number {
+  return 1050 -(this.instaladas.reduce((sum, v) => sum + v.vintaladas, 0));
 }
 isNewRowVentas2(index: number): boolean {
   if (!this.previousVentas2 || this.previousVentas2.length === 0) return false;
